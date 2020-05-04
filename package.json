@@ -1,0 +1,36 @@
+{
+    "name": "@dpi/json-mask",
+    "version": "0.0.1",
+    "description": "A simple & minimal template engine to build semantic templates for JSON objects and strings.",
+    "main": "build/index.js",
+    "scripts": {
+        "build": "babel lib -d ./build",
+        "dev": "babel lib -d ./build --watch",
+        "test": "babel lib -d ./build && jest"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/pichsenmeister/json-mask.git"
+    },
+    "keywords": [
+        "json",
+        "filter",
+        "mask",
+        "json filter",
+        "json mask",
+        "json tool",
+        "query",
+        "projection"
+    ],
+    "author": "David Pichsenmeister <opensource@pichsenmeister.com>",
+    "homepage": "https://github.com/pichsenmeister/json-mask",
+    "license": "MIT",
+    "dependencies": {},
+    "devDependencies": {
+        "@babel/cli": "^7.8.4",
+        "@babel/core": "^7.9.6",
+        "@babel/preset-env": "^7.9.6",
+        "browserify": "^16.5.1",
+        "jest": "^25.5.4"
+    }
+}
