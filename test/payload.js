@@ -35,6 +35,21 @@ module.exports = {
             }
         },
         {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Some text."
+            },
+            "accessory": {
+                "type": "button",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Button"
+                },
+                "value": false
+            }
+        },
+        {
             "elements": [
                 {
                     "type": "button",

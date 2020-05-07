@@ -113,11 +113,50 @@ test("it should match a sub structure mask in a JSON array", () => {
     expect(mask.length).toBe(1)
 })
 
+test("it should match a sub structure mask in a JSON array with $any", () => {
+    const mask = JSONMask.match(payload.match_array, {
+        accessory: {
+            text: {
+                type: '$any'
+            }
+        }
+    })
+
+    // return array should have 2 elements
+    expect(mask.length).toBe(2)
+})
+
+test("it should match a sub structure mask in a JSON array with existing RegEx", () => {
+    const mask = JSONMask.match(payload.match_array, {
+        accessory: {
+            text: {
+                type: /^plain_\w*$/
+            }
+        }
+    })
+
+    // return array should have 1 element
+    expect(mask.length).toBe(1)
+})
+
+test("it should match a sub structure mask in a JSON array with not existing RegEx", () => {
+    const mask = JSONMask.match(payload.match_array, {
+        accessory: {
+            text: {
+                type: /^other\w*$/
+            }
+        }
+    })
+
+    // return array should have 0 elements
+    expect(mask.length).toBe(0)
+})
+
 test("it should match all values in a JSON array", () => {
     const mask = JSONMask.match(payload.match_array, { type: 'button' })
 
     // return array should have 1 elements
-    expect(mask.length).toBe(3)
+    expect(mask.length).toBe(4)
 
     expect(JSON.stringify(mask.first())).toBe(JSON.stringify({
         "type": "button",
@@ -130,6 +169,15 @@ test("it should match all values in a JSON array", () => {
     }))
 
     expect(JSON.stringify(mask.get(1))).toBe(JSON.stringify({
+        "type": "button",
+        "text": {
+            "type": "mrkdwn",
+            "text": "Button"
+        },
+        "value": false
+    }))
+
+    expect(JSON.stringify(mask.get(2))).toBe(JSON.stringify({
         "type": "button",
         "text": {
             "type": "plain_text",
@@ -153,7 +201,7 @@ test("it should match all values in a JSON array using `all()`", () => {
     const mask = JSONMask.match(payload.match_array, { type: 'button' })
 
     // return array should have 1 elements
-    expect(mask.length).toBe(3)
+    expect(mask.length).toBe(4)
 
     const all = mask.all()
 
@@ -170,6 +218,15 @@ test("it should match all values in a JSON array using `all()`", () => {
     expect(JSON.stringify(all[1])).toBe(JSON.stringify({
         "type": "button",
         "text": {
+            "type": "mrkdwn",
+            "text": "Button"
+        },
+        "value": false
+    }))
+
+    expect(JSON.stringify(all[2])).toBe(JSON.stringify({
+        "type": "button",
+        "text": {
             "type": "plain_text",
             "text": "Button",
             "emoji": true
@@ -177,7 +234,7 @@ test("it should match all values in a JSON array using `all()`", () => {
         "value": true
     }))
 
-    expect(JSON.stringify(all[2])).toBe(JSON.stringify({
+    expect(JSON.stringify(all[3])).toBe(JSON.stringify({
         "type": "button",
         "text": {
             "type": "mrkdwn",
@@ -227,7 +284,7 @@ test("it should match all values with `$any` in a JSON array", () => {
     })
 
     // return array should have 3 elements
-    expect(mask.length).toBe(3)
+    expect(mask.length).toBe(4)
 
     expect(JSON.stringify(mask.first())).toBe(JSON.stringify({
         "type": "button",
@@ -242,12 +299,22 @@ test("it should match all values with `$any` in a JSON array", () => {
     expect(JSON.stringify(mask.get(1))).toBe(JSON.stringify({
         "type": "button",
         "text": {
+            "type": "mrkdwn",
+            "text": "Button"
+        },
+        "value": false
+    }))
+
+    expect(JSON.stringify(mask.get(2))).toBe(JSON.stringify({
+        "type": "button",
+        "text": {
             "type": "plain_text",
             "text": "Button",
             "emoji": true
         },
         "value": true
     }))
+
 
     expect(JSON.stringify(mask.last())).toBe(JSON.stringify({
         "type": "button",

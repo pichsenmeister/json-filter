@@ -12,7 +12,7 @@ var match = function match(tree, mask) {
 
   switch (_typeof(tree)) {
     case 'object':
-      results = _parseMatch(tree, mask, results);
+      results = _parseMask(tree, mask, results);
       break;
   }
 
@@ -43,45 +43,41 @@ var _generateResultObj = function _generateResultObj(results) {
   return obj;
 };
 
-var _parseMatch = function _parseMatch(tree, mask, results) {
+var _parseMask = function _parseMask(tree, mask, results) {
   var maskKeys = Object.keys(mask);
 
-  switch (_typeof(tree)) {
-    case 'object':
-      if (Array.isArray(tree)) {
-        tree.map(function (item) {
-          return _parseMatch(item, mask, results);
-        });
-      } else {
-        // get keys of current tree
-        var treeKeys = Object.keys(tree);
-        var isSubMask = maskKeys.filter(function (val) {
-          return treeKeys.indexOf(val) >= 0;
-        }).length === maskKeys.length; // check length if all maskKeys are part of this structure and their values are equal
+  if (Array.isArray(tree)) {
+    tree.map(function (item) {
+      return _parseMask(item, mask, results);
+    });
+  } else {
+    // get keys of current tree
+    var treeKeys = Object.keys(tree); // check length if all maskKeys are part of this structure and their values are equal
 
-        if (isSubMask) {
-          var filter = maskKeys.filter(function (item) {
-            if (typeof tree[item] === 'string' && mask[item] instanceof RegExp) {
-              return mask[item].test(tree[item]);
-            } else if (_typeof(mask[item]) !== 'object') {
-              return tree[item] === mask[item] || mask[item] === '$any';
-            }
+    var isSubMask = maskKeys.filter(function (val) {
+      return treeKeys.indexOf(val) >= 0;
+    }).length === maskKeys.length; // if keys match, check their value
 
-            return utils.compareObj(tree[item], mask[item]);
-          });
+    if (isSubMask) {
+      var filter = maskKeys.filter(function (item) {
+        if (typeof tree[item] === 'string' && mask[item] instanceof RegExp) {
+          return mask[item].test(tree[item]);
+        } else if (_typeof(mask[item]) !== 'object') {
+          return tree[item] === mask[item] || mask[item] === '$any';
+        }
 
-          if (filter.length === maskKeys.length) {
-            results.push(tree);
-          }
-        } // check sub tree as well
+        return utils.compareObj(mask[item], tree[item]);
+      });
 
-
-        treeKeys.forEach(function (item) {
-          if (_typeof(tree[item]) === 'object') _parseMatch(tree[item], mask, results);
-        });
+      if (filter.length === maskKeys.length) {
+        results.push(tree);
       }
+    } // check sub tree as well
 
-      break;
+
+    treeKeys.forEach(function (item) {
+      if (_typeof(tree[item]) === 'object') _parseMask(tree[item], mask, results);
+    });
   }
 
   return results;
