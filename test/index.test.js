@@ -48,6 +48,77 @@ test("it should throw an `invalid JSON mask object` error if JSON mask is not va
 
 })
 
+test("it should match all elements on a JSON object with empty mask", () => {
+    const mask = JSONMask.match(payload.match_object, {})
+
+    // return array should have 5 elements
+    expect(mask.length).toBe(5)
+})
+
+test("it should match all elements on a JSON array with empty mask", () => {
+    const mask = JSONMask.match(payload.match_array, {})
+
+    // return array should have 13 elements
+    expect(mask.length).toBe(13)
+})
+
+test("it should match strings", () => {
+    const mask = JSONMask.match(payload.match_object, {
+        string: "str"
+    })
+
+    // return array should have 1 element
+    expect(mask.length).toBe(1)
+
+    expect(JSON.stringify(mask.first())).toBe(JSON.stringify({
+        "number": 1,
+        "boolean": true,
+        "string": "str"
+    }))
+})
+
+test("it should match numbers", () => {
+    const mask = JSONMask.match(payload.match_object, {
+        number: 1
+    })
+
+    // return array should have 1 element
+    expect(mask.length).toBe(1)
+
+    expect(JSON.stringify(mask.first())).toBe(JSON.stringify({
+        "number": 1,
+        "boolean": true,
+        "string": "str"
+    }))
+})
+
+test("it should match booleans", () => {
+    const mask = JSONMask.match(payload.match_object, {
+        boolean: true
+    })
+
+    // return array should have 1 element
+    expect(mask.length).toBe(1)
+
+    expect(JSON.stringify(mask.first())).toBe(JSON.stringify({
+        "number": 1,
+        "boolean": true,
+        "string": "str"
+    }))
+})
+
+test("it should return the same element for `first()`, `last()` and `get(0)` if there's only 1 element", () => {
+    const mask = JSONMask.match(payload.match_object, {
+        boolean: true
+    })
+
+    // return array should have 1 element
+    expect(mask.length).toBe(1)
+
+    expect(JSON.stringify(mask.first())).toBe(JSON.stringify(mask.last()))
+    expect(JSON.stringify(mask.first())).toBe(JSON.stringify(mask.get(0)))
+})
+
 test("it should match a high level mask in a JSON object", () => {
     const mask = JSONMask.match(payload.match_object, { type: 'button' })
 
@@ -443,6 +514,35 @@ test("it should have same length of `length` property and length of `all()` ", (
     // return array should have 2 elements
     expect(mask.length).toBe(2)
     expect(mask.length).toBe(mask.all().length)
+})
+
+test("it should validate the README example because that would be embarrassing", () => {
+    let mask = JSONMask.match(payload.readme, { type: 'click' })
+
+    // return array should have 2 elements
+    expect(mask.length).toBe(2)
+    expect(JSON.stringify(mask.first())).toBe(JSON.stringify({
+        type: 'click',
+        property: 'site_signup'
+    }))
+    expect(JSON.stringify(mask.last())).toBe(JSON.stringify({
+        type: 'click',
+        property: 'site_pricing'
+    }))
+
+    mask = JSONMask.match(payload.readme, { type: '$any' })
+    expect(mask.length).toBe(3)
+
+    mask = JSONMask.match(payload.readme, { property: /^site_\w*$/ })
+    expect(mask.length).toBe(2)
+    expect(JSON.stringify(mask.first())).toBe(JSON.stringify({
+        type: 'click',
+        property: 'site_signup'
+    }))
+    expect(JSON.stringify(mask.last())).toBe(JSON.stringify({
+        type: 'click',
+        property: 'site_pricing'
+    }))
 })
 
 

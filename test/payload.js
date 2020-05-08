@@ -1,6 +1,4 @@
 module.exports = {
-    "string": "This is a ${banana}, an ${apple} and another banana.",
-
     "match_object": {
         "type": "section",
         "text": {
@@ -15,6 +13,11 @@ module.exports = {
                 "emoji": true
             },
             "value": true
+        },
+        "primitives": {
+            "number": 1,
+            "boolean": true,
+            "string": "str"
         }
     },
     "match_array": [
@@ -70,5 +73,22 @@ module.exports = {
                 }
             ]
         }
-    ]
+    ],
+    "readme": {
+        "actions": [
+            {
+                "type": "visit",
+                "property": "website"
+            },
+            {
+                "type": "click",
+                "property": "site_signup"
+            },
+            {
+                "type": "click",
+                "property": "site_pricing"
+            }
+        ],
+        "property": "other"
+    }
 }

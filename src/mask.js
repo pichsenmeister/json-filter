@@ -1,6 +1,8 @@
 const utils = require('./utils')
 
-const match = (tree, mask) => {
+const match = (tree, mask, trim) => {
+    // TODO implement trim
+    trim = trim || false
     if (typeof tree !== 'object') throw new Error('invalid JSON')
     if (typeof mask !== 'object') throw new Error('invalid JSON mask object')
     if (Array.isArray(mask)) throw new Error('invalid JSON mask object')

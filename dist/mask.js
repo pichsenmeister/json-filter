@@ -4,7 +4,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 var utils = require('./utils');
 
-var match = function match(tree, mask) {
+var match = function match(tree, mask, trim) {
+  // TODO implement trim
+  trim = trim || false;
   if (_typeof(tree) !== 'object') throw new Error('invalid JSON');
   if (_typeof(mask) !== 'object') throw new Error('invalid JSON mask object');
   if (Array.isArray(mask)) throw new Error('invalid JSON mask object');
