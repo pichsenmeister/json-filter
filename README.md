@@ -1,5 +1,13 @@
 # @dpi/json-mask
 
+<a href="https://david-dm.org/pichsenmeister/json-mask">
+    <img src="https://david-dm.org/pichsenmeister/json-mask.svg" alt="Dependency Status" />
+</a>
+<a href="https://david-dm.org/pichsenmeister/json-mask#info=devDependencies">
+    <img src="https://david-dm.org/pichsenmeister/json-mask/dev-status.svg" alt="devDependency Status" />
+</a>
+
+
 A simple library to parse out specific elements of a larger JSON object or JSON array based on a provided JSON mask. This makes it easier to filter out key-value pairs on any given JSON object, even more complex mask object are supported if you feel like that (feel free to check out the [tests](test/index.test.js) on examples).
 
 * [Installation](#installation)
