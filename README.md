@@ -24,9 +24,6 @@ yarn add @dpi/json-mask
 
 ## Getting started
 
-`json-mask`
-
-
 Let's take a very simple JSON object as example ...
 ```
 const json = {
@@ -55,6 +52,7 @@ const mask = {
 }
 ```
 
+You can now easily filter the original JSON object with the given mask ✨
 
 ```
 const JSONMask = require('@dpi/json-mask')
