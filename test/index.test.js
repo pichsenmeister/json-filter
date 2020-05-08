@@ -1,4 +1,4 @@
-const JSONMask = require("../build/index")
+const JSONMask = require("../dist/index")
 const payload = require("./payload")
 
 /**

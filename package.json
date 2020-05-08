@@ -2,11 +2,11 @@
     "name": "@dpi/json-mask",
     "version": "0.0.1",
     "description": "A simple & minimal template engine to build semantic templates for JSON objects and strings.",
-    "main": "build/index.js",
+    "main": "dist/index.js",
     "scripts": {
-        "build": "babel lib -d ./build",
-        "dev": "babel lib -d ./build --watch",
-        "test": "babel lib -d ./build && jest"
+        "build": "babel src -d ./dist",
+        "dev": "babel src -d ./dist --watch",
+        "test": "babel src -d ./dist && jest"
     },
     "repository": {
         "type": "git",
