@@ -157,7 +157,7 @@ The result is an object with following properties:
 | `all()`   | Array    | Returns all matching elements as a JSON array. |
 | `first()` | Object   | Returns the first matching element |
 | `last()`  | Object   | Returns the last matching element |
-| `get(i)`  | Object   | Returns the matching element on given index |
+| `get(i)`  | Object   | Returns the matching element on given index `i` |
 
 ### Methods
 
