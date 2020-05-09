@@ -56,7 +56,7 @@ const json = {
 ... and define a simple mask to filter out all `actions` that are of `{type: 'click'}`
 ```
 const mask = {
-    type: 'click`
+    type: 'click'
 }
 ```
 
@@ -66,7 +66,7 @@ You can now easily filter the original JSON object with the given mask ✨
 const JSONMask = require('@dpi/json-mask')
 
 const result = JSONMask.match(json, mask)
-cosnt elements = result.all()
+const elements = result.all()
 ```
 
 This will match all elements from the JSON object that have a property `type` with a value of `'click'`. As a result `elements` will look like this
