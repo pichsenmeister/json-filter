@@ -14,7 +14,7 @@ var match = function match(tree, mask, trim) {
 
   switch (_typeof(tree)) {
     case 'object':
-      results = _parseMask(tree, mask, results);
+      results = _parseMask(tree, mask, trim, results);
       break;
   }
 
@@ -45,12 +45,12 @@ var _generateResultObj = function _generateResultObj(results) {
   return obj;
 };
 
-var _parseMask = function _parseMask(tree, mask, results) {
+var _parseMask = function _parseMask(tree, mask, trim, results) {
   var maskKeys = Object.keys(mask);
 
   if (Array.isArray(tree)) {
     tree.map(function (item) {
-      return _parseMask(item, mask, results);
+      return _parseMask(item, mask, trim, results);
     });
   } else {
     // get keys of current tree
@@ -72,17 +72,36 @@ var _parseMask = function _parseMask(tree, mask, results) {
       });
 
       if (filter.length === maskKeys.length) {
-        results.push(tree);
+        if (trim) {
+          results.push(_trim(tree, mask));
+        } else {
+          results.push(tree);
+        }
       }
     } // check sub tree as well
 
 
     treeKeys.forEach(function (item) {
-      if (_typeof(tree[item]) === 'object') _parseMask(tree[item], mask, results);
+      if (_typeof(tree[item]) === 'object') _parseMask(tree[item], mask, trim, results);
     });
   }
 
   return results;
+};
+
+var _trim = function _trim(tree, mask) {
+  if (_typeof(tree) === 'object') {
+    var obj = {};
+
+    for (var key in mask) {
+      var v = tree[key];
+      obj[key] = _typeof(tree) === "object" ? _trim(tree[key], mask[key], obj) : v;
+    }
+
+    return obj;
+  }
+
+  return tree;
 };
 
 module.exports = {

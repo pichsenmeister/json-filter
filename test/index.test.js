@@ -164,11 +164,41 @@ test("it should match a sub structure mask in a JSON object", () => {
             text: {
                 type: 'plain_text'
             }
+        },
+        primitives: {
+            number: 1
         }
     })
 
     // return array should have 1 element
     expect(mask.length).toBe(1)
+})
+
+test("it should match a sub structure mask in a JSON object and trim to mask", () => {
+    const mask = JSF.match(payload.match_object, {
+        accessory: {
+            text: {
+                type: /^plain_\w*$/
+            }
+        },
+        primitives: {
+            number: 1
+        }
+    }, true)
+
+    // return array should have 1 element
+    expect(mask.length).toBe(1)
+
+    expect(JSON.stringify(mask.first())).toBe(JSON.stringify({
+        accessory: {
+            text: {
+                type: 'plain_text'
+            }
+        },
+        primitives: {
+            number: 1
+        }
+    }))
 })
 
 test("it should match a sub structure mask in a JSON array", () => {
@@ -182,6 +212,27 @@ test("it should match a sub structure mask in a JSON array", () => {
 
     // return array should have 1 element
     expect(mask.length).toBe(1)
+})
+
+test("it should match a sub structure mask in a JSON array and trim to mask", () => {
+    const mask = JSF.match(payload.match_array, {
+        accessory: {
+            text: {
+                type: 'plain_text'
+            }
+        }
+    }, true)
+
+    // return array should have 1 element
+    expect(mask.length).toBe(1)
+
+    expect(JSON.stringify(mask.first())).toBe(JSON.stringify({
+        accessory: {
+            text: {
+                type: 'plain_text'
+            }
+        }
+    }))
 })
 
 test("it should match a sub structure mask in a JSON array with $any", () => {
@@ -541,6 +592,31 @@ test("it should validate the README example because that would be embarrassing",
     }))
     expect(JSON.stringify(mask.last())).toBe(JSON.stringify({
         type: 'click',
+        property: 'site_pricing'
+    }))
+})
+
+test("it should validate the README example because that would be embarrassing, with trim this time", () => {
+    let mask = JSF.match(payload.readme, { type: 'click' }, true)
+
+    // return array should have 2 elements
+    expect(mask.length).toBe(2)
+    expect(JSON.stringify(mask.first())).toBe(JSON.stringify({
+        type: 'click'
+    }))
+    expect(JSON.stringify(mask.last())).toBe(JSON.stringify({
+        type: 'click'
+    }))
+
+    mask = JSF.match(payload.readme, { type: '$any' })
+    expect(mask.length).toBe(3)
+
+    mask = JSF.match(payload.readme, { property: /^site_\w*$/ }, true)
+    expect(mask.length).toBe(2)
+    expect(JSON.stringify(mask.first())).toBe(JSON.stringify({
+        property: 'site_signup'
+    }))
+    expect(JSON.stringify(mask.last())).toBe(JSON.stringify({
         property: 'site_pricing'
     }))
 })

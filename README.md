@@ -119,7 +119,7 @@ You can use the keyword `$any` on any filter property to match all possible valu
 | -------- | -------- | ---- | ----------- |
 | `json`   | yes      | JSON | Any valid JSON object or array |
 | `filter`   | yes      | Object | Any valid JSON object |
-| `trim`   | no       | bool | A flag to indicate if your results should be trimmed to properties of your filter. If `false` the result will keep the structure of the original JSON, if `true` only properties defined in the filter will be returned. Default to `false`. _(not yet implemented, but since I was just writing the README I added it anyway)_ |
+| `trim`   | no       | bool | A flag to indicate if your results should be trimmed to properties of your filter. If `false` the result will keep the structure of the original JSON, if `true` only properties defined in the filter will be returned. Default to `false`. |
 
 #### Example 
 

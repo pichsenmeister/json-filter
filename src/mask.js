@@ -11,7 +11,7 @@ const match = (tree, mask, trim) => {
 
     switch (typeof tree) {
         case 'object':
-            results = _parseMask(tree, mask, results)
+            results = _parseMask(tree, mask, trim, results)
             break
     }
 
@@ -42,11 +42,11 @@ const _generateResultObj = (results) => {
     return obj
 }
 
-const _parseMask = (tree, mask, results) => {
+const _parseMask = (tree, mask, trim, results) => {
     const maskKeys = Object.keys(mask)
 
     if (Array.isArray(tree)) {
-        tree.map(item => _parseMask(item, mask, results))
+        tree.map(item => _parseMask(item, mask, trim, results))
     } else {
         // get keys of current tree
         let treeKeys = Object.keys(tree)
@@ -64,17 +64,36 @@ const _parseMask = (tree, mask, results) => {
             })
 
             if (filter.length === maskKeys.length) {
-                results.push(tree)
+                if (trim) {
+                    results.push(_trim(tree, mask))
+                } else {
+                    results.push(tree)
+                }
+
             }
         }
 
         // check sub tree as well
         treeKeys.forEach(item => {
-            if (typeof tree[item] === 'object') _parseMask(tree[item], mask, results)
+            if (typeof tree[item] === 'object') _parseMask(tree[item], mask, trim, results)
         })
     }
 
     return results
+}
+
+const _trim = (tree, mask) => {
+    if (typeof tree === 'object') {
+        const obj = {}
+
+        for (const key in mask) {
+            const v = tree[key];
+            obj[key] = (typeof tree === "object") ? _trim(tree[key], mask[key], obj) : v;
+        }
+
+        return obj
+    }
+    return tree
 }
 
 module.exports = {
