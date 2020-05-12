@@ -4,8 +4,8 @@ const match = (tree, mask, trim) => {
     // TODO implement trim
     trim = trim || false
     if (typeof tree !== 'object') throw new Error('invalid JSON')
-    if (typeof mask !== 'object') throw new Error('invalid JSON mask object')
-    if (Array.isArray(mask)) throw new Error('invalid JSON mask object')
+    if (typeof mask !== 'object') throw new Error('invalid JSON filter object')
+    if (Array.isArray(mask)) throw new Error('invalid JSON filter object')
 
     let results = []
 

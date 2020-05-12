@@ -1,18 +1,18 @@
-# @dpi/json-mask
+# @barreljs/json-filter
 
-<a href="https://david-dm.org/pichsenmeister/json-mask">
-    <img src="https://david-dm.org/pichsenmeister/json-mask.svg" alt="Dependency Status" />
+<a href="https://david-dm.org/pichsenmeister/json-filter">
+    <img src="https://david-dm.org/pichsenmeister/json-filter.svg" alt="Dependency Status" />
 </a>
-<a href="https://david-dm.org/pichsenmeister/json-mask#info=devDependencies">
-    <img src="https://david-dm.org/pichsenmeister/json-mask/dev-status.svg" alt="devDependency Status" />
+<a href="https://david-dm.org/pichsenmeister/json-filter#info=devDependencies">
+    <img src="https://david-dm.org/pichsenmeister/json-filter/dev-status.svg" alt="devDependency Status" />
 </a>
 
 
-A simple library to parse out specific elements of a larger JSON object or JSON array based on a provided JSON mask. This makes it easier to filter out key-value pairs on any given JSON object, even more complex mask object are supported if you feel like that (feel free to check out the [tests](test/index.test.js) on examples).
+A simple library to parse out specific elements of a larger JSON object or JSON array based on a provided JSON filter. This makes it easier to filter out key-value pairs on any given JSON object, even more complex filter object are supported if you feel like that (feel free to check out the [tests](test/index.test.js) on examples).
 
 * [Installation](#installation)
 * [Getting started](#getting-started)
-* [Mask](#mask)
+* [Filter](#filter)
 * [Result](#result)
 * [License](#license)
 
@@ -21,13 +21,13 @@ A simple library to parse out specific elements of a larger JSON object or JSON 
 Install via npm
 
 ```
-npm install @dpi/json-mask
+npm install @barreljs/json-filter
 ```
 
 or yarn
 
 ```
-yarn add @dpi/json-mask
+yarn add @barreljs/json-filter
 ```
 
 ## Getting started
@@ -53,19 +53,19 @@ const json = {
 }
 ```
 
-... and define a simple mask to filter out all `actions` that are of `{type: 'click'}`
+... and define a simple filter to get all `actions` that are of `{type: 'click'}`
 ```
-const mask = {
+const filter = {
     type: 'click'
 }
 ```
 
-You can now easily filter the original JSON object with the given mask ✨
+You can now easily filter the original JSON object with the given filter ✨
 
 ```
-const JSONMask = require('@dpi/json-mask')
+const JSF = require('@barreljs/json-filter')
 
-const result = JSONMask.match(json, mask)
+const result = JSF.match(json, filter)
 const elements = result.all()
 ```
 
@@ -84,14 +84,14 @@ This will match all elements from the JSON object that have a property `type` wi
 ]
 ```
 
-## Mask
+## filter
 
-The mask can be any valid JSON object (arrays are not support at this point). An empty JSON mask (`{}`) would match all elements. I don't know why you would do that, but you can ¯\\\_(ツ)\_/¯
+The filter can be any valid JSON object (arrays are not support at this point). An empty JSON filter (`{}`) would match all elements. I don't know why you would do that, but you can ¯\\\_(ツ)\_/¯
 
 
 ### RegEx
 
-`json-mask` supports RegEx for mask properties
+`json-filter` supports RegEx for filter properties
 
 ```
 {
@@ -101,7 +101,7 @@ The mask can be any valid JSON object (arrays are not support at this point). An
 
 ### `$any`
 
-You can use the keyword `$any` on any mask property to match all possible values, like strings, numbers, boolean, objects, and arrays. This might not be useful in the example shown above, but can be helpful if your JSON object gets more complex.
+You can use the keyword `$any` on any filter property to match all possible values, like strings, numbers, boolean, objects, and arrays. This might not be useful in the example shown above, but can be helpful if your JSON object gets more complex.
 
 ```
 {
@@ -111,20 +111,20 @@ You can use the keyword `$any` on any mask property to match all possible values
 
 ### Methods
 
-#### `.match(json, mask, trim)`
+#### `.match(json, filter, trim)`
 
 ##### Arguments
 
 | Argument | Required | Type | Description |
 | -------- | -------- | ---- | ----------- |
 | `json`   | yes      | JSON | Any valid JSON object or array |
-| `mask`   | yes      | Object | Any valid JSON object |
-| `trim`   | no       | bool | A flag to indicate if your results should be trimmed to properties of your mask. If `false` the result will keep the structure of the original JSON, if `true` only properties defined in the mask will be returned. Default to `false`. _(not yet implemented, but since I was just writing the README I added it anyway)_ |
+| `filter`   | yes      | Object | Any valid JSON object |
+| `trim`   | no       | bool | A flag to indicate if your results should be trimmed to properties of your filter. If `false` the result will keep the structure of the original JSON, if `true` only properties defined in the filter will be returned. Default to `false`. _(not yet implemented, but since I was just writing the README I added it anyway)_ |
 
 #### Example 
 
 ```
-const result = JSONMask.match(json, mask, trim)
+const result = JSF.match(json, filter, trim)
 ```
 
 with `trim` set to `false` the above example will match the structure of the original JSON
@@ -142,7 +142,7 @@ with `trim` set to `false` the above example will match the structure of the ori
 ]
 ```
 
-with `trim` set to `true`, the result will be trimmed to the structure of the mask
+with `trim` set to `true`, the result will be trimmed to the structure of the filter
 
 ```
 [
@@ -174,7 +174,7 @@ The result is an object with following properties:
 Returns all matching elements as a JSON array.
 
 ```
-const result = JSONMask.match(json, mask)
+const result = JSF.match(json, filter)
 const all = result.all() // returns element array
 ```
 
@@ -183,7 +183,7 @@ const all = result.all() // returns element array
 Returns the first matching element. If no elements match, returns `undefined`.
 
 ```
-const result = JSONMask.match(json, mask)
+const result = JSF.match(json, filter)
 const first = result.first() // returns first element
 ```
 
@@ -192,7 +192,7 @@ const first = result.first() // returns first element
 Returns the last matching element. If no elements match, returns `undefined`. If only one element exists, it returns the same element as `.first()`.
 
 ```
-const result = JSONMask.match(json, mask)
+const result = JSF.match(json, filter)
 const last = result.last() // returns last element
 ```
 
@@ -201,7 +201,7 @@ const last = result.last() // returns last element
 Returns the matching element on given index or `undefined` if no element on that index exists. Index starts at `0`.
 
 ```
-const result = JSONMask.match(json, mask)
+const result = JSF.match(json, filter)
 const element = result.get(3) // returns 4th element
 ```
 

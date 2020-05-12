@@ -8,8 +8,8 @@ var match = function match(tree, mask, trim) {
   // TODO implement trim
   trim = trim || false;
   if (_typeof(tree) !== 'object') throw new Error('invalid JSON');
-  if (_typeof(mask) !== 'object') throw new Error('invalid JSON mask object');
-  if (Array.isArray(mask)) throw new Error('invalid JSON mask object');
+  if (_typeof(mask) !== 'object') throw new Error('invalid JSON filter object');
+  if (Array.isArray(mask)) throw new Error('invalid JSON filter object');
   var results = [];
 
   switch (_typeof(tree)) {
