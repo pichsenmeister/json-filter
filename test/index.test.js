@@ -8,6 +8,7 @@ const payload = require("./payload")
  */
 
 test("it should throw an `invalid JSON` error if payload is not valid JSON", () => {
+
     expect(() => {
         JSF.match("string", {})
     }).toThrow("invalid JSON")
