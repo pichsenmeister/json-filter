@@ -1,4 +1,4 @@
-const JSF = require("../dist/index")
+const JsonFilter = require("../dist/index")
 const payload = require("./payload")
 
 /**
@@ -10,61 +10,61 @@ const payload = require("./payload")
 test("it should throw an `invalid JSON` error if payload is not valid JSON", () => {
 
     expect(() => {
-        JSF.match("string", {})
+        JsonFilter("string", {})
     }).toThrow("invalid JSON")
 
     expect(() => {
-        JSF.match(undefined, {})
+        JsonFilter(undefined, {})
     }).toThrow("invalid JSON")
 
     expect(() => {
-        JSF.match(3, {})
+        JsonFilter(3, {})
     }).toThrow("invalid JSON")
 
     expect(() => {
-        JSF.match(() => { }, {})
+        JsonFilter(() => { }, {})
     }).toThrow("invalid JSON")
 })
 
 test("it should throw an `invalid JSON mask object` error if JSON mask is not valid JSON", () => {
     expect(() => {
-        JSF.match({}, 'string')
+        JsonFilter({}, 'string')
     }).toThrow("invalid JSON filter object")
 
     expect(() => {
-        JSF.match({}, 3)
+        JsonFilter({}, 3)
     }).toThrow("invalid JSON filter object")
 
     expect(() => {
-        JSF.match({}, undefined)
+        JsonFilter({}, undefined)
     }).toThrow("invalid JSON filter object")
 
     expect(() => {
-        JSF.match({}, [])
+        JsonFilter({}, [])
     }).toThrow("invalid JSON filter object")
 
     expect(() => {
-        JSF.match({}, () => { })
+        JsonFilter({}, () => { })
     }).toThrow("invalid JSON filter object")
 
 })
 
 test("it should match all elements on a JSON object with empty mask", () => {
-    const mask = JSF.match(payload.match_object, {})
+    const mask = JsonFilter(payload.match_object, {})
 
     // return array should have 5 elements
     expect(mask.length).toBe(5)
 })
 
 test("it should match all elements on a JSON array with empty mask", () => {
-    const mask = JSF.match(payload.match_array, {})
+    const mask = JsonFilter(payload.match_array, {})
 
     // return array should have 13 elements
     expect(mask.length).toBe(13)
 })
 
 test("it should match strings", () => {
-    const mask = JSF.match(payload.match_object, {
+    const mask = JsonFilter(payload.match_object, {
         string: "str"
     })
 
@@ -79,7 +79,7 @@ test("it should match strings", () => {
 })
 
 test("it should match numbers", () => {
-    const mask = JSF.match(payload.match_object, {
+    const mask = JsonFilter(payload.match_object, {
         number: 1
     })
 
@@ -94,7 +94,7 @@ test("it should match numbers", () => {
 })
 
 test("it should match booleans", () => {
-    const mask = JSF.match(payload.match_object, {
+    const mask = JsonFilter(payload.match_object, {
         boolean: true
     })
 
@@ -109,7 +109,7 @@ test("it should match booleans", () => {
 })
 
 test("it should return the same element for `first()`, `last()` and `get(0)` if there's only 1 element", () => {
-    const mask = JSF.match(payload.match_object, {
+    const mask = JsonFilter(payload.match_object, {
         boolean: true
     })
 
@@ -120,8 +120,21 @@ test("it should return the same element for `first()`, `last()` and `get(0)` if 
     expect(JSON.stringify(mask.first())).toBe(JSON.stringify(mask.get(0)))
 })
 
+test("it should return undefined for `first()`, `last()` and `get(0)` if there's no match", () => {
+    const mask = JsonFilter(payload.match_object, {
+        property: "no_match"
+    })
+
+    // return array should have 0 element
+    expect(mask.length).toBe(0)
+
+    expect(JSON.stringify(mask.first())).toBe(undefined)
+    expect(JSON.stringify(mask.last())).toBe(undefined)
+    expect(JSON.stringify(mask.get(0))).toBe(undefined)
+})
+
 test("it should match a high level mask in a JSON object", () => {
-    const mask = JSF.match(payload.match_object, { type: 'button' })
+    const mask = JsonFilter(payload.match_object, { type: 'button' })
 
     // return array should have 1 element
     expect(mask.length).toBe(1)
@@ -138,7 +151,7 @@ test("it should match a high level mask in a JSON object", () => {
 })
 
 test("it should match a sub structure mask in a JSON object", () => {
-    const mask = JSF.match(payload.match_object, {
+    const mask = JsonFilter(payload.match_object, {
         text: {
             type: "plain_text",
             text: "Button"
@@ -160,7 +173,7 @@ test("it should match a sub structure mask in a JSON object", () => {
 })
 
 test("it should match a sub structure mask in a JSON object", () => {
-    const mask = JSF.match(payload.match_object, {
+    const mask = JsonFilter(payload.match_object, {
         accessory: {
             text: {
                 type: 'plain_text'
@@ -176,7 +189,7 @@ test("it should match a sub structure mask in a JSON object", () => {
 })
 
 test("it should match a sub structure mask in a JSON object and trim to mask", () => {
-    const mask = JSF.match(payload.match_object, {
+    const mask = JsonFilter(payload.match_object, {
         accessory: {
             text: {
                 type: /^plain_\w*$/
@@ -203,7 +216,7 @@ test("it should match a sub structure mask in a JSON object and trim to mask", (
 })
 
 test("it should match a sub structure mask in a JSON array", () => {
-    const mask = JSF.match(payload.match_array, {
+    const mask = JsonFilter(payload.match_array, {
         accessory: {
             text: {
                 type: 'plain_text'
@@ -216,7 +229,7 @@ test("it should match a sub structure mask in a JSON array", () => {
 })
 
 test("it should match a sub structure mask in a JSON array and trim to mask", () => {
-    const mask = JSF.match(payload.match_array, {
+    const mask = JsonFilter(payload.match_array, {
         accessory: {
             text: {
                 type: 'plain_text'
@@ -237,7 +250,7 @@ test("it should match a sub structure mask in a JSON array and trim to mask", ()
 })
 
 test("it should match a sub structure mask in a JSON array with $any", () => {
-    const mask = JSF.match(payload.match_array, {
+    const mask = JsonFilter(payload.match_array, {
         accessory: {
             text: {
                 type: '$any'
@@ -250,7 +263,7 @@ test("it should match a sub structure mask in a JSON array with $any", () => {
 })
 
 test("it should match a sub structure mask in a JSON array with existing RegEx", () => {
-    const mask = JSF.match(payload.match_array, {
+    const mask = JsonFilter(payload.match_array, {
         accessory: {
             text: {
                 type: /^plain_\w*$/
@@ -263,7 +276,7 @@ test("it should match a sub structure mask in a JSON array with existing RegEx",
 })
 
 test("it should match a sub structure mask in a JSON array with not existing RegEx", () => {
-    const mask = JSF.match(payload.match_array, {
+    const mask = JsonFilter(payload.match_array, {
         accessory: {
             text: {
                 type: /^other\w*$/
@@ -276,7 +289,7 @@ test("it should match a sub structure mask in a JSON array with not existing Reg
 })
 
 test("it should match all values in a JSON array", () => {
-    const mask = JSF.match(payload.match_array, { type: 'button' })
+    const mask = JsonFilter(payload.match_array, { type: 'button' })
 
     // return array should have 1 elements
     expect(mask.length).toBe(4)
@@ -321,7 +334,7 @@ test("it should match all values in a JSON array", () => {
 })
 
 test("it should match all values in a JSON array using `all()`", () => {
-    const mask = JSF.match(payload.match_array, { type: 'button' })
+    const mask = JsonFilter(payload.match_array, { type: 'button' })
 
     // return array should have 1 elements
     expect(mask.length).toBe(4)
@@ -368,7 +381,7 @@ test("it should match all values in a JSON array using `all()`", () => {
 })
 
 test("it should match all values in a JSON array", () => {
-    const mask = JSF.match(payload.match_array, {
+    const mask = JsonFilter(payload.match_array, {
         type: "button",
         text: {
             type: "plain_text",
@@ -401,7 +414,7 @@ test("it should match all values in a JSON array", () => {
 })
 
 test("it should match all values with `$any` in a JSON array", () => {
-    const mask = JSF.match(payload.match_array, {
+    const mask = JsonFilter(payload.match_array, {
         type: "button",
         text: "$any"
     })
@@ -450,7 +463,7 @@ test("it should match all values with `$any` in a JSON array", () => {
 })
 
 test("it should match all values with `$any` in a JSON object", () => {
-    const mask = JSF.match(payload.match_object, {
+    const mask = JsonFilter(payload.match_object, {
         type: "$any"
     })
 
@@ -459,7 +472,7 @@ test("it should match all values with `$any` in a JSON object", () => {
 })
 
 test("it should match all values with regex in a JSON object", () => {
-    const mask = JSF.match(payload.match_object, {
+    const mask = JsonFilter(payload.match_object, {
         type: /^plain_\w*$/
     })
 
@@ -475,7 +488,7 @@ test("it should match all values with regex in a JSON object", () => {
 
 test("it should match all given values in a JSON object", () => {
 
-    const mask = JSF.match(payload.match_object, { type: 'button', value: true })
+    const mask = JsonFilter(payload.match_object, { type: 'button', value: true })
 
     // return array should have 1 element
     expect(mask.length).toBe(1)
@@ -493,7 +506,7 @@ test("it should match all given values in a JSON object", () => {
 
 test("it should match all given values in a JSON array", () => {
 
-    const mask = JSF.match(payload.match_array, { type: 'button', value: true })
+    const mask = JsonFilter(payload.match_array, { type: 'button', value: true })
 
     // return array should have 2 elements
     expect(mask.length).toBe(2)
@@ -522,7 +535,7 @@ test("it should match all given values in a JSON array", () => {
 
 test("it should return undefined for out-of-bounds index in JSON object", () => {
 
-    const mask = JSF.match(payload.match_object, { type: 'button', value: true })
+    const mask = JsonFilter(payload.match_object, { type: 'button', value: true })
 
     // return array should have 1 element
     expect(mask.length).toBe(1)
@@ -532,7 +545,7 @@ test("it should return undefined for out-of-bounds index in JSON object", () => 
 
 test("it should return undefined for out-of-bounds index in JSON array", () => {
 
-    const mask = JSF.match(payload.match_array, { type: 'button', value: true })
+    const mask = JsonFilter(payload.match_array, { type: 'button', value: true })
 
     // return array should have 2 elements
     expect(mask.length).toBe(2)
@@ -542,7 +555,7 @@ test("it should return undefined for out-of-bounds index in JSON array", () => {
 
 test("it should return undefined for `first()` if no results found", () => {
 
-    const mask = JSF.match(payload.match_array, { type: 'button', key: 'has-no-match' })
+    const mask = JsonFilter(payload.match_array, { type: 'button', key: 'has-no-match' })
 
     // return array should have 0 elements
     expect(mask.length).toBe(0)
@@ -552,7 +565,7 @@ test("it should return undefined for `first()` if no results found", () => {
 
 test("it should return undefined for `last()` if no results found", () => {
 
-    const mask = JSF.match(payload.match_array, { type: 'button', key: 'has-no-match' })
+    const mask = JsonFilter(payload.match_array, { type: 'button', key: 'has-no-match' })
 
     // return array should have 0 elements
     expect(mask.length).toBe(0)
@@ -561,7 +574,7 @@ test("it should return undefined for `last()` if no results found", () => {
 })
 
 test("it should have same length of `length` property and length of `all()` ", () => {
-    const mask = JSF.match(payload.match_array, { type: 'button', value: true })
+    const mask = JsonFilter(payload.match_array, { type: 'button', value: true })
 
     // return array should have 2 elements
     expect(mask.length).toBe(2)
@@ -569,7 +582,7 @@ test("it should have same length of `length` property and length of `all()` ", (
 })
 
 test("it should validate the README example because that would be embarrassing", () => {
-    let mask = JSF.match(payload.readme, { type: 'click' })
+    let mask = JsonFilter(payload.readme, { type: 'click' })
 
     // return array should have 2 elements
     expect(mask.length).toBe(2)
@@ -582,10 +595,10 @@ test("it should validate the README example because that would be embarrassing",
         property: 'site_pricing'
     }))
 
-    mask = JSF.match(payload.readme, { type: '$any' })
+    mask = JsonFilter(payload.readme, { type: '$any' })
     expect(mask.length).toBe(3)
 
-    mask = JSF.match(payload.readme, { property: /^site_\w*$/ })
+    mask = JsonFilter(payload.readme, { property: /^site_\w*$/ })
     expect(mask.length).toBe(2)
     expect(JSON.stringify(mask.first())).toBe(JSON.stringify({
         type: 'click',
@@ -598,7 +611,7 @@ test("it should validate the README example because that would be embarrassing",
 })
 
 test("it should validate the README example because that would be embarrassing, with trim this time", () => {
-    let mask = JSF.match(payload.readme, { type: 'click' }, true)
+    let mask = JsonFilter(payload.readme, { type: 'click' }, true)
 
     // return array should have 2 elements
     expect(mask.length).toBe(2)
@@ -609,10 +622,10 @@ test("it should validate the README example because that would be embarrassing, 
         type: 'click'
     }))
 
-    mask = JSF.match(payload.readme, { type: '$any' })
+    mask = JsonFilter(payload.readme, { type: '$any' })
     expect(mask.length).toBe(3)
 
-    mask = JSF.match(payload.readme, { property: /^site_\w*$/ }, true)
+    mask = JsonFilter(payload.readme, { property: /^site_\w*$/ }, true)
     expect(mask.length).toBe(2)
     expect(JSON.stringify(mask.first())).toBe(JSON.stringify({
         property: 'site_signup'

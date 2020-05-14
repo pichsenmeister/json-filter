@@ -63,9 +63,9 @@ const filter = {
 You can now easily filter the original JSON object with the given filter ✨
 
 ```
-const JSF = require('@barreljs/json-filter')
+const JsonFilter = require('@barreljs/json-filter')
 
-const result = JSF.match(json, filter)
+const result = JsonFilter(json, filter)
 const elements = result.all()
 ```
 
@@ -84,7 +84,7 @@ This will match all elements from the JSON object that have a property `type` wi
 ]
 ```
 
-## filter
+## Filter
 
 The filter can be any valid JSON object (arrays are not support at this point). An empty JSON filter (`{}`) would match all elements. I don't know why you would do that, but you can ¯\\\_(ツ)\_/¯
 
@@ -109,9 +109,9 @@ You can use the keyword `$any` on any filter property to match all possible valu
 }
 ```
 
-### Methods
+### Usage
 
-#### `.match(json, filter, trim)`
+#### `JsonFilter(json, filter, trim)`
 
 ##### Arguments
 
@@ -124,7 +124,7 @@ You can use the keyword `$any` on any filter property to match all possible valu
 #### Example 
 
 ```
-const result = JSF.match(json, filter, trim)
+const result = JsonFilter(json, filter, trim)
 ```
 
 with `trim` set to `false` the above example will match the structure of the original JSON
@@ -161,7 +161,7 @@ The result is an object with following properties:
 
 | Property  | Return Type | Description |
 | --------- | -------- | --------- |
-| `length`  | Number   | JSON |
+| `length`  | Number   | Number of matching elements |
 | `all()`   | Array    | Returns all matching elements as a JSON array. |
 | `first()` | Object   | Returns the first matching element |
 | `last()`  | Object   | Returns the last matching element |
@@ -174,7 +174,7 @@ The result is an object with following properties:
 Returns all matching elements as a JSON array.
 
 ```
-const result = JSF.match(json, filter)
+const result = JsonFilter(json, filter)
 const all = result.all() // returns element array
 ```
 
@@ -183,7 +183,7 @@ const all = result.all() // returns element array
 Returns the first matching element. If no elements match, returns `undefined`.
 
 ```
-const result = JSF.match(json, filter)
+const result = JsonFilter(json, filter)
 const first = result.first() // returns first element
 ```
 
@@ -192,7 +192,7 @@ const first = result.first() // returns first element
 Returns the last matching element. If no elements match, returns `undefined`. If only one element exists, it returns the same element as `.first()`.
 
 ```
-const result = JSF.match(json, filter)
+const result = JsonFilter(json, filter)
 const last = result.last() // returns last element
 ```
 
@@ -201,7 +201,7 @@ const last = result.last() // returns last element
 Returns the matching element on given index or `undefined` if no element on that index exists. Index starts at `0`.
 
 ```
-const result = JSF.match(json, filter)
+const result = JsonFilter(json, filter)
 const element = result.get(3) // returns 4th element
 ```
 
